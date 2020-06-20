@@ -13,6 +13,18 @@ Welcome to the channel page!
         {{ channel_name }}
     </li>
 </ul>
+<h1>Members:</h1>
+<ul>
+    {% for member in members %}
+        <li>
+            {{ member }}
+        </li>
+        {% empty %}
+            <li>
+                This channel is empty.
+            </li>
+    {% endfor %}
+</ul>
 
 <a href="{% url 'index' %}"> BACK TO HOME </a> 
 

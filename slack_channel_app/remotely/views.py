@@ -1,5 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Channel
 
@@ -14,6 +15,9 @@ def index(request):
     # m3 = MyModel(my_id=2, date=today, title='hello')
     # m3.save() 
 
+    #seeing sql command from migrations defined: 
+    # python3 manage.py sqlmigrate remotely 0001
+
     context = { 
         'channels': Channel.objects.all(),
         'omer': 'asdfasdfasdfasdflkasdjf'
@@ -24,9 +28,13 @@ def fetch_channel(request, channel_name):
     channel = ''
     try: 
         channel = Channel.objects.get(name=channel_name)
-    except Channel.DoesNotExist: 
+    except ObjectDoesNotExist: 
         raise Http404("Channel does not exist :(")
     
-    context = {'channel_name': channel }
+    context = {
+        'channel_name': channel,
+        'members': channel.members.all()
+    }
 
     return render(request, "channel.html", context)
+
