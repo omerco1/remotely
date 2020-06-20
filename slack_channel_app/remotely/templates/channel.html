@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+Channel page
+{% endblock %}
+
+{% body block %}
+
+Welcome to the channel page! 
+
+<ul>
+    <li>
+        {{ channel_name }}
+    </li>
+</ul>
+
+<a href="{% url 'index' %}"> BACK TO HOME </a> 
+
+{% endblock %}
