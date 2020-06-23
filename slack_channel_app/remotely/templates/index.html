@@ -5,9 +5,16 @@
 {% endblock %}
 
 {% block body %}
-Home page!
+
+<div>
+    Welcome to home page! 
+
+    Logged in as user: {{ username }}
+
+</div>
+
+
         <ul>
-            {{omer}}
             {% for channel in channels %}
                 <a href="{% url 'channel' channel.name %}">
                     <li>
