@@ -51,27 +51,25 @@ def fetch_channel(request, channel_name):
 
     return render(request, "channel.html", context)
 
-# @login_required(login_url='login/')
 def login_view(request):
 
-    #try: 
-    if request.method == 'POST':
-        usern = request.POST['username']
-        passw = request.POST['password']
-        user = authenticate(request, username=usern, password=passw)
-        if user is not None: 
-            login(request, user)
-            return HttpResponseRedirect(reverse('index'))
-        else: 
-            return render(request, 'login.html', {'message': 'Invalid credentials'})
-    #except: 
-    #    print('POST failed.')
+    try: 
+        if request.method == 'POST':
+            usern = request.POST['username']
+            passw = request.POST['password']
+            user = authenticate(request, username=usern, password=passw)
+            if user is not None: 
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else: 
+                return render(request, 'login.html', {'message': 'Invalid credentials'})
+    except: 
+        print('POST failed.')
 
     return render(request, "login.html", {'message': None})
 
 
 #TODO: Modift LOGIN_URL in settings.py
-# @login_required(login_url='login/')
 def logout_view(request): 
     logout(request)
     print('DBG: Logging out !')
