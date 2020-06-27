@@ -1,27 +1,111 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}
     Home page!
+    
 {% endblock %}
 
 {% block body %}
+<ul class="nav justify-content-end">
+  <li class="nav-item right_padding">
+    <h2 >Remotely</h2>
+  </li>
+    <!-- <li class="nav-item">
+      <a class="nav-link active" href="#">Active</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li> -->
+</ul>
 
-<div>
-    Welcome to home page! 
-
-    Logged in as user: {{ username }}
-
-</div>
-
-
-        <ul>
+<div style="display:flex;"> 
+  <ul class="nav flex-column left_padding" style="width: 25%;">
+    <li class="nav-item stick_left">
+      <h1>Channels</h1>
+    </li>
+    <li class="nav-item add_channel">
+      <a href="#" style="display: flex" data-toggle="modal" data-target="#exampleModalScrollable" type="button"> 
+        <img src="{% static 'img/icons8-plus.svg' %}" class="plus_icon"/>
+        <p style="padding-left:3%; "> New Channel </p>
+      </a>  
+    </li>
+    <li class="nav-item">
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </li>
+  </ul>
+  <div class="container right_padding">
+      
+      <div class="container_padding">
+          <div class="grid_layout">
+            <div class="jumbotron"  >
+                <div>
+                    Welcome to home page! 
+        
+                    Logged in as user: {{ username }}
+                </div>  
+            </div>
+            
+            <h1>Channel Feed... </h1>
+            
             {% for channel in channels %}
-                <a href="{% url 'channel' channel.name %}">
-                    <li>
-                        {{ channel }}
-                    </li>
-                </a>
-            {% endfor %} 
-        </ul>
+              <div class="jumbotron">
+              
+                  <a href="{% url 'channel' channel.name %}">
+                    
+                          {{ channel }}
+                  </a>
+                 
+                </div>
+                {% endfor %} 
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalScrollableTitle">Create New Channel</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="height: 250px;">
+              
+                <form class="form-inline my-2 my-lg-0" method="post">
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" type="text" placeholder="Channel Name" aria-label="Channel Name">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Add members: 
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          {% for u in users %}
+                              <option class="dropdown-item" value="saab">{{u}}</option>  
+                              <option class="dropdown-item" value="saab">{{u}}</option>  
+                              <option class="dropdown-item" value="saab">{{u}}</option>  
+                              
+                          {% endfor %}
+                        </div>
+                      </div>
+
+                </form>
+
+
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Add Channel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
 
 {% endblock %}

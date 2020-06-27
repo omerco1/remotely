@@ -5,8 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib.auth.models import User
-
-from .models import Channel
+from .models import *
 
 # Create your views here.
 @login_required(login_url='login/')
@@ -26,10 +25,15 @@ def index(request):
 
     #seeing sql command from migrations defined: 
     # python3 manage.py sqlmigrate remotely 0001
-
+    chns = Channel.objects.all()
+    
+    # For now pulling all users available as a proof of concept
+    users = Channel_Member.objects.all()
     context = { 
-        'channels': Channel.objects.all(),
-        'username': request.user
+        'channels': chns,
+        'username': request.user,
+        'users' : users
+
     }
     return render(request, "index.html", context)
 

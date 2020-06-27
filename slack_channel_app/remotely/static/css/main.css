@@ -1,0 +1,21 @@
+.container_padding {
+    padding-top: 3%; 
+
+}
+
+.grid_layout {
+
+
+}
+
+.right_padding {
+    padding-right: 3%;
+}
+
+.left_padding {
+    padding-left: 1%;
+}
+
+.add_channel {
+    align-content: flex-end; 
+}
