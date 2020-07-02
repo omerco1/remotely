@@ -1,9 +1,11 @@
 from django.contrib import admin
 
 from .models import *
+from django.contrib.auth.admin import UserAdmin
+
 
 # Register your models here.
 admin.site.register(Channel_Member)
 admin.site.register(Channel)
-admin.site.register(Users)
+admin.site.register(User, UserAdmin)
 admin.site.register(Message)

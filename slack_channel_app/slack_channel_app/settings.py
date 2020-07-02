@@ -71,6 +71,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'slack_channel_app.wsgi.application'
 
+AUTH_USER_MODEL = "remotely.User"
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

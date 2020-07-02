@@ -6,6 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import *
+import uuid
+
+# when inheriting from a super in python to overwrite constructor
+# super().__init__(fname, lname)
+
+# Getting currently registered user: 
+# author = models.ForeignKey(get_user_model())
 
 # Create your views here.
 @login_required(login_url='login/')
@@ -13,7 +20,32 @@ def index(request):
 
     if not request.user.is_authenticated:
         return render(request, "login.html")
+
+    chns = Channel.objects.all()
+    create_channel_msg = ''
     
+    # For now pulling all users available as a proof of concept
+    users = Channel_Member.objects.all()
+    context = { 
+        'channels': chns,
+        'username': request.user,
+        'users' : users,
+        'message': ''
+
+    }
+
+    # Creating new channel 
+    if request.method == 'POST':
+        try: 
+            if Channel.objects.get(name=request.POST['channel_name']) != None: 
+                context["message"] = 'Error: Channel with that name already exists!'
+                return render(request, "index.html", context) 
+        except: 
+            chan = Channel(name=request.POST['channel_name'], num_users=1)
+            chan.save()
+
+            
+        
     #return HttpResponse("Hello!") 
 
     #ordering objects from model by date: 
@@ -25,16 +57,7 @@ def index(request):
 
     #seeing sql command from migrations defined: 
     # python3 manage.py sqlmigrate remotely 0001
-    chns = Channel.objects.all()
-    
-    # For now pulling all users available as a proof of concept
-    users = Channel_Member.objects.all()
-    context = { 
-        'channels': chns,
-        'username': request.user,
-        'users' : users
 
-    }
     return render(request, "index.html", context)
 
 # @login_required(login_url='login/')

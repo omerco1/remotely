@@ -39,9 +39,15 @@
       </form>
     </li>
   </ul>
+
   <div class="container right_padding">
-      
+     
       <div class="container_padding">
+          {% if message %}
+          <div class="alert alert-danger" role="alert">
+             {{ message }}
+            </div>
+        {% endif %}
           <div class="grid_layout">
             <div class="jumbotron"  >
                 <div>
@@ -80,28 +86,53 @@
               
                 <form class="form-inline my-2 my-lg-0" method="post">
                     {% csrf_token %}
-                    <input class="form-control mr-sm-2" type="text" placeholder="Channel Name" aria-label="Channel Name">
+                    <input name="channel_name" class="form-control mr-sm-2" type="text" placeholder="Channel Name" aria-label="Channel Name">
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                          Add members: 
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           {% for u in users %}
-                              <option class="dropdown-item" value="saab">{{u}}</option>  
-                              <option class="dropdown-item" value="saab">{{u}}</option>  
-                              <option class="dropdown-item" value="saab">{{u}}</option>  
-                              
+                              <option name="member" class="dropdown-item" value="member_set">{{u}}</option>     
                           {% endfor %}
                         </div>
                       </div>
 
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Add Channel</button>
+                      </div>
+
                 </form>
 
+                <script type="text/javascript">
+                  function form_submit() {
+
+                      var count = 0; 
+                      var stars = document.getElementsByName('rate');
+                  
+                      for (var i = 0, length = stars.length; i < length; i++) {
+                          if (stars[i].checked) {
+                              // do whatever you want with the checked radio
+                              count = i;
+                              break; 
+                          }
+                      }
+
+                      count = 5 - count; 
+                      
+                      var form=document.getElementById('rate_form');//retrieve the form as a DOM element
+
+                      var input = document.createElement('input');//prepare a new input DOM element
+                      input.setAttribute('name', 'num_stars');//set the param name
+                      input.setAttribute('value', count);//set the value
+                      input.setAttribute('type', 'text')//set the type, like "hidden" or other
+                      form.appendChild(input);//append the input to the form
+                  form.submit();
+                  }    
+              </script>
 
 
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Add Channel</button>
+
             </div>
           </div>
         </div>
