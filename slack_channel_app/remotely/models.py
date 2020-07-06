@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib import admin 
 
 # Create your models here.
 class Message(models.Model): 
@@ -22,12 +23,12 @@ class User(AbstractUser):
 
 class Channel_Member(models.Model): 
     # Channel members table - is a relationship better? 
-    
+    #group_id = models.SmallIntegerField(default=0)
     channels = models.ManyToManyField("Channel", blank=True, related_name="members")
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
     def __str__(self): 
-        return (f"username: TODO") 
+        return (f"channel_group_id-") 
 
 class Channel(models.Model): 
     
@@ -36,14 +37,9 @@ class Channel(models.Model):
     name = models.CharField(max_length=64)
     num_users =models.SmallIntegerField()
     public = models.BooleanField(default=True)
+    description = models.CharField(max_length=512,  blank=True,null=True)
 
     def __str__(self): 
         return (f"name: {self.name} number of users: {self.num_users}")
-
-
-
-
-
-
 
 

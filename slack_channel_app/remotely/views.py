@@ -5,8 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import *
 import uuid
+import datetime
 
 # when inheriting from a super in python to overwrite constructor
 # super().__init__(fname, lname)
@@ -21,7 +23,7 @@ def index(request):
     if not request.user.is_authenticated:
         return render(request, "login.html")
 
-    chns = Channel.objects.all()
+    chns = Channel.objects.filter(public=True)
     create_channel_msg = ''
     
     # For now pulling all users available as a proof of concept
@@ -33,17 +35,33 @@ def index(request):
         'message': ''
 
     }
-
     # Creating new channel 
     if request.method == 'POST':
         try: 
-            if Channel.objects.get(name=request.POST['channel_name']) != None: 
+            if Channel.objects.get(name=request.POST['channel_name']): 
                 context["message"] = 'Error: Channel with that name already exists!'
                 return render(request, "index.html", context) 
         except: 
-            chan = Channel(name=request.POST['channel_name'], num_users=1)
+            is_public = False
+            try: 
+                is_public = True if ((request.POST['private_channel_check']) == 'on') else False 
+            except: 
+                print('here')
+                is_public = False
+                
+            chan = Channel(name=request.POST['channel_name'], num_users=1, public=is_public)
             chan.save()
-
+            
+            chanMem = Channel_Member()
+            chanMem.user = (User.objects.get(username=request.user.username))
+            chanMem.channels.add(chan)
+            chanMem.save()
+            
+            # TODO: Change to query by uuid
+            #chanMem.user =   # get_user_model()
+            #print(f"user: {User.objects.get(username=request.user.username).username} uuid: {User.objects.get(username=request.user.username).uuid}")
+            #chanMem.channels = chan 
+            #chanMem.save()
             
         
     #return HttpResponse("Hello!") 
@@ -120,6 +138,8 @@ def reqister_user(request):
         if user is not None: 
             user.first_name = first_name
             user.last_name = last_name
+            user.uuid = uuid.uuid1()
+            user.date_joined = datetime.datetime.now()
             user.save()
             return HttpResponseRedirect(reverse('login'))
     except Exception as e:
