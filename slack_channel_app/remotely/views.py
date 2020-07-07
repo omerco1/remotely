@@ -23,16 +23,26 @@ def index(request):
     if not request.user.is_authenticated:
         return render(request, "login.html")
 
-    chns = Channel.objects.filter(public=True)
-    create_channel_msg = ''
+    current_user = (User.objects.get(username=request.user.username))    
+    try: 
+        channel_member_obj = Channel_Member.objects.get(user=current_user)
+        users_channel_feed = channel_member_obj.channels.all()
+    except: 
+        users_channel_feed = [] 
+        channel_member_obj = None 
     
+    # if user has no channels indicate no channels 
+    if len(users_channel_feed) ==0 : 
+        create_channel_msg = 'You have no channels, browse around and join one you like!'
+    else: 
+        create_channel_msg = '' 
     # For now pulling all users available as a proof of concept
     users = Channel_Member.objects.all()
     context = { 
-        'channels': chns,
+        'channels': users_channel_feed,
         'username': request.user,
         'users' : users,
-        'message': ''
+        'message': create_channel_msg
 
     }
     # Creating new channel 
@@ -48,12 +58,13 @@ def index(request):
             except: 
                 print('here')
                 is_public = False
-                
+            
+            print(is_public)
             chan = Channel(name=request.POST['channel_name'], num_users=1, public=is_public)
             chan.save()
             
             chanMem = Channel_Member()
-            chanMem.user = (User.objects.get(username=request.user.username))
+            chanMem.user = current_user
             chanMem.channels.add(chan)
             chanMem.save()
             
