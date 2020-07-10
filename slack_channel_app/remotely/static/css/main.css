@@ -19,3 +19,7 @@
 .add_channel {
     align-content: flex-end; 
 }
+
+.top_padding {
+    padding-top: 3%; 
+}

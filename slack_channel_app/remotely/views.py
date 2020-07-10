@@ -132,6 +132,9 @@ def logout_view(request):
     #return HttpResponseRedirect(reverse('login'))
     return render(request, 'login.html', {'message': None})
 
+def search(request): 
+    return render(request, 'search.html')
+
 def reqister_user(request): 
 
     try: 
